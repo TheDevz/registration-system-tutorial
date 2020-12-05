@@ -1,3 +1,10 @@
+<?php
+$logged = false;
+if (!$logged) {
+	header('Location: login.php');
+}
+?>
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -7,6 +14,7 @@
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<title>Hello, world!</title>
+
 	</head>
 	<body>
 		<h1>Hello, world!</h1>

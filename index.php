@@ -17,7 +17,17 @@ if (!$logged) {
 
 	</head>
 	<body>
-		<h1>Hello, world!</h1>
+		<div class="container">
+			<div class="row justify-content-center">
+
+				<div class="col-8" style="margin-top: 100px">
+
+				  	<div class="card card-block">
+				  		<h1>Welcome!</h1>
+				  	</div>
+				</div>
+			</div>
+		</div>
 		<!-- jQuery and Bootstrap Bundle (includes Popper) -->
 		<script src="js/jquery-3.5.1.slim.min.js"></script>
 		<script src="js/bootstrap.bundle.min.js" ></script>

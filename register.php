@@ -1,5 +1,12 @@
 <?php
-$appropriateRequest = isset($_POST['register']) && count($_POST) === 6;
+
+$errors = [];
+
+$firstname = '';
+$lastname = '';
+$email = '';
+$password = '';
+$confirmPassword = '';
 
 /*
 Firstname string
@@ -9,17 +16,51 @@ Password should be more than 8 max 35
 Confirm shoud be the same as password
  */
 
-$firstname = $_POST['firstname'] ?? '';
-$lastname = $_POST['lastname'] ?? '';
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
-$confirmPassword = $_POST['confirmPassword'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-$firstnameValid = !empty($firstname) && !is_numeric($firstname);
-// $emailValid = !empty($email) && filter_var(trim($email), FILTER_VALIDATE_EMAIL);
-$emailValid = !empty($email) && preg_match('/^[_a-z0-9-]+(\. [_a-z0-9-]+)*@[a-z0-9-]+(\. [a-z0-9-]+)*(\.[a-z]{2,3})$/', 'test@test.com');
-$passwordValid = !empty($password) && preg_match('/[0-9]{8}/', $password);
-$confirmPasswordValid = !empty($confirmPassword);
+	$firstname = sanitize($_POST['firstname']) ?? '';
+	$lastname = sanitize($_POST['lastname']) ?? '';
+	$email = sanitize($_POST['email']) ?? '';
+	$password = sanitize($_POST['password']) ?? '';
+	$confirmPassword = sanitize($_POST['confirmPassword']) ?? '';
+
+	if (empty($firstname)) {
+		$errors['firstname'] = 'First name is required';
+	} else if (!preg_match("/^[a-zA-Z-' ]*$/", $firstname)) {
+		$errors['firstname'] = "Only letters and white space allowed";
+	}
+	if (empty($email)) {
+		$errors['email'] = 'Email is required';
+	} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		$errors['email'] = 'Email must be valid';
+	}
+	if (empty($password)) {
+		$errors['password'] = 'Password is required';
+	} else if (strlen($password) < 8 || strlen($password) > 35) {
+		$errors['password'] = 'Password should have between 8 and 20 characters';
+	}
+
+	if (empty($confirmPassword)) {
+		$errors['confirmPassword'] = 'Confirmation of password is required';
+	}
+	if ($password && $confirmPassword && strcmp($password, $confirmPassword) !== 0) {
+		$errors['confirmPassword'] = 'Your password must match the password you created first';
+	}
+	if (empty($errors)) {
+		redirect("index.php?logged=0");
+	}
+}
+
+function redirect($url) {
+	header("Location: $url");
+}
+
+function sanitize($data) {
+	$data = trim($data);
+	$data = stripcslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
 
 ?>
 
@@ -35,76 +76,61 @@ $confirmPasswordValid = !empty($confirmPassword);
 	</head>
 	<body>
 		<div class="container">
-			<!-- <?php if (count($errors) > 0): ?>
-				<div class="alert alert-danger" role="alert">
-				  <?php foreach ($errors as $key => $error): ?>
-				  	<?php echo $error . '<br>'; ?>
-				  <?php endforeach?>
-				</div>
-			<?php endif?>-->
 		 	<div class="row justify-content-center" style="margin-top: 80px">
 				<div class="col-6">
 					<div class="card">
 						<div class="card-body">
 							<h1 class="text-center">Sign up</h1>
-							<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-							<!-- <form action="">
-							<form> -->
+							<form action="<?php echo sanitize($_SERVER['PHP_SELF']); ?>" method="post">
 								<div class="row justify-content-center">
 									<div class="col-6">
 										<div class="form-group">
 											<label for="firstname">Firstname</label>
 											<input type="text" name="firstname"
-											class="form-control <?php echo !$firstnameValid && $appropriateRequest ? 'is-invalid' : '' ?>" >
-											<?php if (!$firstnameValid && $appropriateRequest): ?>
-												<div class="invalid-feedback">
-													Firstname is invalid
-												</div>
-											<?php endif?>
+											class="form-control <?php echo isset($errors['firstname']) ? 'is-invalid' : '' ?>" >
+											<div class="invalid-feedback">
+												<?php echo $errors['firstname'] ?? '' ?>
+											</div>
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="form-group">
-											<label for="firstname">Lastname</label>
-											<input type="text"  name="lastname" class="form-control">
+											<label for="lastname">Lastname</label>
+											<input type="text"  name="lastname" class="form-control <?php echo isset($errors['lastname']) ? 'is-invalid' : '' ?>">
+											<div class="invalid-feedback">
+												<?php echo $errors['lastname'] ?? '' ?>
+											</div>
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="exampleInputEmail1">Email address</label>
 									<input type="text"
-									class="form-control <?php echo !$emailValid && $appropriateRequest ? 'is-invalid' : '' ?>"
+									class="form-control <?php echo isset($errors['email']) ? 'is-invalid' : '' ?>"
 									id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-									<?php if (!$emailValid && $appropriateRequest): ?>
-										<div class="invalid-feedback">
-											Email is invalid
-										</div>
-									<?php endif?>
+									<div class="invalid-feedback">
+										<?php echo $errors['email'] ?? '' ?>
+									</div>
 									<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 								</div>
 								<div class="form-group">
 									<label for="exampleInputPassword1">Password</label>
 									<input type="password"
-									class="form-control <?php echo !$passwordValid && $appropriateRequest ? 'is-invalid' : '' ?>"
+									class="form-control <?php echo isset($errors['password']) ? 'is-invalid' : '' ?>"
 									id="exampleInputPassword1" name="password">
-									<?php if (!$passwordValid && $appropriateRequest): ?>
-										<div class="invalid-feedback">
-											Password is invalid
-										</div>
-									<?php endif?>
+									<div class="invalid-feedback">
+										<?php echo $errors['password'] ?? '' ?>
+									</div>
 								</div>
 								<div class="form-group">
 									<label for="exampleInputPassword1">Confirm Password</label>
 									<input type="password"
-									class="form-control <?php echo !$confirmPasswordValid && $appropriateRequest ? 'is-invalid' : '' ?>"
+									class="form-control <?php echo isset($errors['confirmPassword']) ? 'is-invalid' : '' ?>"
 									id="exampleInputPassword1" name="confirmPassword">
-									<?php if (!$confirmPasswordValid && $appropriateRequest): ?>
-										<div class="invalid-feedback">
-											Confirm passwords is invalid
-										</div>
-									<?php endif?>
+									<div class="invalid-feedback">
+										<?php echo $errors['confirmPassword'] ?? '' ?>
+									</div>
 								</div>
-
 								<button type="submit" class="btn btn-primary" name="register">Sign up</button>
 							</form>
 						</div>
@@ -115,24 +141,6 @@ $confirmPasswordValid = !empty($confirmPassword);
 				</div>
 			</div>
 		</div>
-		<?php if ($appropriateRequest): ?>
-				<div class="row justify-content-center mt-5">
-					<div class="col-6">
-						<div class="card">
-							<div class="card-header">
-								Your input:
-							</div>
-							<div class="card-body">
-									<p>Firstname: <?php echo htmlspecialchars($firstname); ?></p>
-									<p>Lastname: <?php echo htmlspecialchars($lastname); ?></p>
-									<p>Email: <?php echo htmlspecialchars($email); ?></p>
-									<p>Password: <?php echo htmlspecialchars($password); ?></p>
-									<p>Confirm password: <?php echo htmlspecialchars($confirmPassword); ?></p>
-							</div>
-						</div>
-					</div>
-				</div>
-			<?php endif?>
 
 		<!-- jQuery and Bootstrap Bundle (includes Popper) -->
 		<script src="js/jquery-3.5.1.slim.min.js"></script>

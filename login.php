@@ -1,9 +1,41 @@
 <?php
-$appropriateRequest = isset($_POST['login']) && count($_POST) === 3;
 
-// echo "<pre>";
-// var_dump($_POST);
-// echo "</pre>";
+$errors = [];
+
+$email = '';
+$password = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	$email = sanitize($_POST['email']) ?? '';
+	$password = sanitize($_POST['password']) ?? '';
+
+	if (empty($email)) {
+		$errors['email'] = 'Email is required';
+	} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		$errors['email'] = 'Email must be valid';
+	}
+	if (empty($password)) {
+		$errors['password'] = 'Password is required';
+	} else if (strlen($password) < 8 || strlen($password) > 35) {
+		$errors['password'] = 'Password should have between 8 and 35 characters';
+	}
+
+	if (empty($errors)) {
+		redirect("index.php?logged=1");
+	}
+
+}
+
+function redirect($url) {
+	header("Location: $url");
+}
+
+function sanitize($data) {
+	$data = trim($data);
+	$data = stripcslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -23,29 +55,22 @@ $appropriateRequest = isset($_POST['login']) && count($_POST) === 3;
 						<div class="card-body">
 							<h1 class="text-center">Sign in</h1>
 							<form action="login.php" method="post">
-							<!-- <form action="">
-							<form> -->
-
 								<div class="form-group">
 									<label for="exampleInputEmail1">Email address</label>
 									<input type="text"
-									class="form-control <?php echo empty($email) && $appropriateRequest ? 'is-invalid' : ''; ?>"
+									class="form-control <?php echo isset($errors['email']) ? 'is-invalid' : '' ?>"
 									id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-									<?php if (empty($email)): ?>
-										<div class="invalid-feedback">
-											Email is required
-										</div>
-									<?php endif?>
+									<div class="invalid-feedback">
+										<?php echo $errors['email'] ?? '' ?>
+									</div>
 									<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 								</div>
 								<div class="form-group">
 									<label for="exampleInputPassword1">Password</label>
-									<input type="password" class="form-control <?php echo empty($email) && $appropriateRequest ? 'is-invalid' : ''; ?>" id="exampleInputPassword1" name="password">
-									<?php if (empty($email)): ?>
-										<div class="invalid-feedback">
-											Password is required
-										</div>
-									<?php endif?>
+									<input type="password" class="form-control <?php echo isset($errors['password']) ? 'is-invalid' : '' ?>" id="exampleInputPassword1" name="password">
+									<div class="invalid-feedback">
+										<?php echo $errors['password'] ?? '' ?>
+									</div>
 								</div>
 
 								<button type="submit" class="btn btn-primary" name="login">Sign in</button>
@@ -58,22 +83,6 @@ $appropriateRequest = isset($_POST['login']) && count($_POST) === 3;
 					</div>
 				</div>
 			</div>
-			<?php if (isset($email) || isset($password)): ?>
-				<div class="row justify-content-center mt-5">
-					<div class="col-6">
-						<div class="card">
-							<div class="card-header">
-								Your input:
-							</div>
-							<div class="card-body">
-									<p>Email: <?php echo htmlspecialchars($email); ?></p>
-									<p>Password: <?php echo htmlspecialchars($password); ?></p>
-							</div>
-						</div>
-					</div>
-				</div>
-			<?php endif?>
-
 		</div>
 
 		<!-- jQuery and Bootstrap Bundle (includes Popper) -->

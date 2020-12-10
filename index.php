@@ -1,8 +1,9 @@
 <?php
-$logged = false;
+$logged = $_REQUEST['logged'] ?? false;
 if (!$logged) {
 	header('Location: login.php');
 }
+
 ?>
 
 <!doctype html>

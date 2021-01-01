@@ -49,20 +49,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if ($password && $confirmPassword && strcmp($password, $confirmPassword) !== 0) {
 		$errors['confirmPassword'] = 'Your password must match the password you created first';
 	}
+
 	if (empty($errors)) {
-		store_user([
+		$user_details = [
 			"firstname" => $firstname,
 			"lastname" => $lastname,
 			"email" => $email,
 			"password" => password_hash($password, PASSWORD_DEFAULT),
-		]);
-		redirect(HOMEPAGE . "?logged=0");
+		];
+
+		if(store_user($user_details)){
+			echo "User stored successfully";
+		} else {
+			echo "Something went wrong";
+		}
+
+		redirect(HOMEPAGE, ['logged' => 0]);
 	}
 }
 
 ?>
 <?php include 'components/heading.php';?>
 
+	<?php echo sanitize($_REQUEST['error'] ?? '') ?>
 	<?php require 'components/register-form.html';?>
 
 <?php include 'components/ending.php';?>

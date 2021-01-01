@@ -1,9 +1,12 @@
 <?php
 
-function redirect($url, $query=[]) {
+function redirect($url, $query=[], $exit=true) {
 	$url = add_query($url, $query);
 	
 	header("Location: $url");
+	if ($exut) {
+		exit;
+	}
 }
 
 function add_query($url, $query){

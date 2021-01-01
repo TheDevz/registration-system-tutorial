@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if ($user && $validPassword) {
 			redirect(HOMEPAGE, ['logged' => 1]);
 		} else {
-			redirect(LOGIN_PAGE, ['error' => "Either not users exists or password is not valid"]);
+			redirect(LOGIN_PAGE, ['error' => "Either not user exists or password is not valid"]);
 		}
 	}
 

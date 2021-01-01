@@ -1,6 +1,7 @@
 <?php
+require 'db/utils.php';
 require 'inc/utils.php';
-require 'inc/constants.php';
+require_once 'inc/constants.php';
 
 $errors = [];
 
@@ -49,6 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['confirmPassword'] = 'Your password must match the password you created first';
 	}
 	if (empty($errors)) {
+		store_user([
+			"firstname" => $firstname,
+			"lastname" => $lastname,
+			"email" => $email,
+			"password" => password_hash($password, PASSWORD_DEFAULT),
+		]);
 		redirect(HOMEPAGE . "?logged=0");
 	}
 }

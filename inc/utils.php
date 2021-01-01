@@ -10,3 +10,9 @@ function sanitize($data) {
 	$data = htmlspecialchars($data);
 	return $data;
 }
+
+function prettyDump($variable){
+    echo "<pre>";
+    var_dump($variable);
+    echo "</pre>";
+}

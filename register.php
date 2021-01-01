@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['firstname'] = "Only letters and white space allowed";
 	}
 
-	if (empty($file)) {
+	if (empty($file) || empty($file['tmp_name'])) {
 		$errors['picture'] = 'Picture' . IS_REQUIRED;
 	} else if (is_image($file)) {
 		$errors['picture'] = 'File is not an image.';
@@ -53,7 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$errors['email'] = 'Email' . IS_REQUIRED;
 	} else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$errors['email'] = 'Email must be valid';
-	} 
+	} else if(email_exists($email)){
+		$errors['email'] = 'User with such an email already exists';
+	}
 
 	if (empty($password)) {
 		$errors['password'] = 'Password' . IS_REQUIRED;

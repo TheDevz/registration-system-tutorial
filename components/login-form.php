@@ -9,7 +9,7 @@
 							<label for="exampleInputEmail1">Email address</label>
 							<input type="text"
 							class="form-control <?php echo isset($errors['email']) ? 'is-invalid' : '' ?>"
-							id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+							id="exampleInputEmail1" aria-describedby="emailHelp" name="email" value=" <?php echo sanitize($email) ?>">
 							<div class="invalid-feedback">
 								<?php echo $errors['email'] ?? '' ?>
 							</div>
@@ -17,7 +17,7 @@
 						</div>
 						<div class="form-group">
 							<label for="exampleInputPassword1">Password</label>
-							<input type="password" class="form-control <?php echo isset($errors['password']) ? 'is-invalid' : '' ?>" id="exampleInputPassword1" name="password">
+							<input type="password" class="form-control <?php echo isset($errors['password']) ? 'is-invalid' : '' ?>" id="exampleInputPassword1" name="password" value=" <?php echo sanitize($password) ?>">
 							<div class="invalid-feedback">
 								<?php echo $errors['password'] ?? '' ?>
 							</div>

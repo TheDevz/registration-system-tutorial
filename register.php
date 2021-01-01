@@ -4,6 +4,7 @@ require 'inc/utils.php';
 require 'inc/upload.php';
 require_once 'inc/constants.php';
 
+$tab_title = 'Sign up';
 $errors = [];
 
 $firstname = '';

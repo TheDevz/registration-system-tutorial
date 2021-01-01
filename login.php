@@ -3,6 +3,7 @@ require_once 'db/utils.php';
 require_once 'inc/constants.php';
 require 'inc/utils.php';
 
+$tab_title = 'Sign in';
 $errors = [];
 
 $email = '';

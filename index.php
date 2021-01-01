@@ -2,6 +2,7 @@
 require 'inc/utils.php';
 require 'db/utils.php';
 
+$tab_title = "Admin panel";
 $logged = $_REQUEST['logged'] ?? false;
 
 if (!$logged) {

@@ -1,7 +1,19 @@
 <?php
 
-function redirect($url) {
+function redirect($url, $query=[]) {
+	$url = add_query($url, $query);
+	
 	header("Location: $url");
+}
+
+function add_query($url, $query){
+	if (!empty($query)) {
+		$url .= "?";
+		foreach ($query as $name => $value) {
+			$url .= "$name=$value";
+		}
+	}
+	return $url;
 }
 
 function sanitize($data) {

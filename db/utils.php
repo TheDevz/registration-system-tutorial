@@ -1,11 +1,27 @@
 <?php
 require_once 'inc/constants.php';
 
+function get_user($value, $key){
+	$users = get_users();
+
+	foreach ($users as $user) {
+		if ($user[$key] === $value) {
+			return $user;
+		}
+	}
+
+	return false;
+}
+
+function get_users(){
+	return get_db()['users'];
+}
+
 function store_user($user_details){
 	$current_db_data = get_db();
 	$current_db_data['users'][] = $user_details;
 	
-	if (user_exists($user_details, $current_db_data['users'])) {
+	if (user_exists($user_details)) {
 		$error_msg = "User with such email exists";
 		redirect(REGISTRATION_PAGE, ['error' => $error_msg]);
 		exit;
@@ -15,9 +31,15 @@ function store_user($user_details){
 	return set_db($current_db_data);
 }
 
-function user_exists($user_details, $users){
+function user_exists($user_details){
+	return email_exists($user_details['email']);
+}
+
+function email_exists($email){
+	$current_db_data = get_db();
+	$users = $current_db_data['users'];
 	foreach ($users as $key => $user) {
-		if ($user['email'] === $user_details['email']) {
+		if ($user['email'] === $email) {
 			return true;
 		}
 	}

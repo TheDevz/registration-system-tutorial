@@ -1,5 +1,6 @@
 <?php
-
+require_once 'db/utils.php';
+require_once 'inc/constants.php';
 require 'inc/utils.php';
 
 $errors = [];
@@ -24,7 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	if (empty($errors)) {
-		redirect("index.php?logged=1");
+		$user = get_user($email, 'email');
+		$validPassword = password_verify($password, $user['password']);
+		
+		if ($user && $validPassword) {
+			redirect(HOMEPAGE, ['logged' => 1]);
+		} else {
+			redirect(LOGIN_PAGE, ['error' => "Either not users exists or password is not valid"]);
+		}
 	}
 
 }
@@ -32,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php include 'components/heading.php';?>
 
+	<?php echo sanitize($_REQUEST['error'] ?? '') ?>
 	<?php include 'components/login-form.php';?>
 
 <?php include 'components/ending.php';?>

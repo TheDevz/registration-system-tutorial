@@ -27,6 +27,7 @@ $users_data = $db_data['users'];
                                 <th scope="col">Firstname</th>
                                 <th scope="col">Lastname</th>
                                 <th scope="col">email</th>
+                                <th scope="col">picture</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -36,6 +37,7 @@ $users_data = $db_data['users'];
                                         <td><?php echo $user['firstname'] ?></td>
                                         <td><?php echo $user['lastname'] ?></td>
                                         <td><?php echo $user['email'] ?></td>
+                                        <td><a href="<?php echo sanitize($user['picture']) ?>">uploaded picture</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -43,6 +45,7 @@ $users_data = $db_data['users'];
                     <?php else: ?>
                         <h5 class="p-3 text-center">Hey, there are no users</h5>
                     <?php endif; ?>
+                </div>
             </div>
 		</div>
 	</div>

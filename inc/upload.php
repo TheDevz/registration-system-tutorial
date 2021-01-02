@@ -2,11 +2,20 @@
 require_once 'inc/constants.php';
 require_once 'inc/utils.php';
 
+function check_uploads_folder(){
+	$dir = UPLOADS_PATH;
+
+	if(!file_exists($dir) && !is_dir($dir)){
+	    mkdir( $dir );
+	} 
+}
+
 function is_image($input){
 	return getimagesize($input["tmp_name"]) === false;
 }
 
 function file_stored($input){
+	check_uploads_folder();
 	$target_file = get_target_file($input);
 	return file_exists($target_file);
 }

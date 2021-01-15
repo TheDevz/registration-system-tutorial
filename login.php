@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once 'db/utils.php';
 require_once 'inc/constants.php';
 require 'inc/utils.php';
@@ -30,7 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$validPassword = password_verify($password, $user['password']);
 		
 		if ($user && $validPassword) {
-			redirect(HOMEPAGE, ['logged' => 1]);
+			$_SESSION['logged'] = true;
+//			setcookie('logged', true);
+			redirect(HOMEPAGE);
 		} else {
 			redirect(LOGIN_PAGE, ['error' => "Either not user exists or password is not valid"]);
 		}

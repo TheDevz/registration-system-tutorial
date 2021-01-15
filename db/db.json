@@ -1,4 +1,11 @@
 {
     "users": [
+        {
+            "firstname": "Abubakr",
+            "lastname": "Abduvakhidov",
+            "picture": "uploads\/245485.jpg",
+            "email": "test1@test.com",
+            "password": "$2y$10$.\/9Rh4qG0kygQ2CdnSA6GO2.wk5.qwOoV3Dob9\/d0S7OH3cFL8XuG"
+        }
     ]
 }

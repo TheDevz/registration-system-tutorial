@@ -1,9 +1,11 @@
 <?php
+session_start();
+
 require 'inc/utils.php';
 require 'db/utils.php';
 
 $tab_title = "Admin panel";
-$logged = $_REQUEST['logged'] ?? false;
+$logged = $_SESSION['logged'] ?? false;
 
 if (!$logged) {
 	redirect('login.php');

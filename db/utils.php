@@ -1,7 +1,11 @@
 <?php
 require_once 'inc/constants.php';
 
-function get_user($value, $key){
+function get_user($index){
+    return get_users()[$index];
+}
+
+function get_user_by_property($value, $key){
 	$users = get_users();
 
 	foreach ($users as $user) {

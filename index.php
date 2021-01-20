@@ -1,18 +1,21 @@
 <?php
 session_start();
 
-require 'inc/utils.php';
+require_once 'inc/utils.php';
 require 'db/utils.php';
+require 'db/models/User.php';
 
 $tab_title = "Admin panel";
-$logged = $_SESSION['logged'] ?? false;
 
-if (!$logged) {
-	redirect('login.php');
+$user_index = $_SESSION['user_id'] ?? null;
+
+$user = new User($user_index);
+
+if ($user->firstname === 'guest'){
+    redirect('login.php');
 }
 
-$db_data = get_db();
-$users_data = $db_data['users'];
+$users_data = $user->get_all();
 ?>
 
 <?php include 'components/heading.php';?>

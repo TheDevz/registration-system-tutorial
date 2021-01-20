@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			echo "Something went wrong";
 		}
 
-		redirect(HOMEPAGE, ['logged' => 0]);
+		redirect(HOMEPAGE);
 	}
 }
 

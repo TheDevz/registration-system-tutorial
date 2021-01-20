@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	if (empty($errors)) {
-		$user = get_user($email, 'email');
+		$user = get_user_by_property($email, 'email');
 		$validPassword = password_verify($password, $user['password']);
 		
 		if ($user && $validPassword) {

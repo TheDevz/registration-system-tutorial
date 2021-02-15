@@ -1,5 +1,5 @@
 <?php
-require_once 'inc/constants.php';
+include_once 'inc/constants.php';
 
 function get_user($index){
     return get_users()[$index];
@@ -11,6 +11,19 @@ function get_user_by_property($value, $key){
 	foreach ($users as $user) {
 		if ($user[$key] === $value) {
 			return $user;
+		}
+	}
+
+	return false;
+}
+
+function get_user_id_by_email($email){
+	$users = get_users();
+
+	for($i = 0; $i < count($users); $i++) {
+	    $user = $users[$i];
+		if ($user['email'] === $email) {
+			return $i;
 		}
 	}
 

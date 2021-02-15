@@ -27,7 +27,7 @@ class User
         return $this->picture;
     }
 
-    public function get_all()
+    public static function get_all()
     {
         return get_users();
     }

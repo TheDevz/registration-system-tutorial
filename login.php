@@ -32,8 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$validPassword = password_verify($password, $user['password']);
 		
 		if ($user && $validPassword) {
-			$_SESSION['logged'] = true;
-//			setcookie('logged', true);
+			$_SESSION['user_id'] = get_user_id_by_email($email);
 			redirect(HOMEPAGE);
 		} else {
 			redirect(LOGIN_PAGE, ['error' => "Either not user exists or password is not valid"]);

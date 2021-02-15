@@ -5,6 +5,29 @@ require_once 'inc/utils.php';
 require 'db/utils.php';
 require 'db/models/User.php';
 
+if (isset($_SERVER['PATH_INFO']) && strlen($_SERVER['PATH_INFO']) > 0) {
+    $request_path = explode('/', $_SERVER['PATH_INFO']);
+    if ($request_path[1] === 'api') {
+        header('Content-Type: application/json');
+
+        if (count($request_path) > 2) {
+
+            $request_instance = $request_path[2];
+
+            if ($request_instance === 'users'){
+                $users = User::get_all();
+                echo json_encode(['data' => $users]);
+            } else {
+                echo "{\"error\": \"No such instance supported\"}";
+            }
+        } else {
+            header('Content-Type: application/json');
+            echo '{"error": "No instance requested"}';
+        }
+        exit;
+    }
+}
+
 $tab_title = "Admin panel";
 
 $user_index = $_SESSION['user_id'] ?? null;
